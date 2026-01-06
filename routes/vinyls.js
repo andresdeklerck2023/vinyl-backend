@@ -1,27 +1,27 @@
 const router = require("express").Router();
 const Vinyl = require("../models/Vinyl");
 
-// Haal alle vinyls
+// GET
 router.get("/", async (req, res) => {
   try {
-    const vinyls = await Vinyl.find(); // nu correct
+    const vinyls = await Vinyl.find();
     res.json(vinyls);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-// Voeg vinyl toe
+// ADD
 router.post("/", async (req, res) => {
   try {
-    const vinyl = await Vinyl.create(req.body); // nu correct
+    const vinyl = await Vinyl.create(req.body); 
     res.json(vinyl);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-// Verwijder vinyl
+// DEL
 router.delete("/:id", async (req, res) => {
   try {
     await Vinyl.findByIdAndDelete(req.params.id);
@@ -31,7 +31,7 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-// Update vinyl
+// UPDATE
 router.put("/:id", async (req, res) => {
   try {
     const updated = await Vinyl.findByIdAndUpdate(req.params.id, req.body, { new: true });
@@ -40,6 +40,4 @@ router.put("/:id", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-
-
 module.exports = router;

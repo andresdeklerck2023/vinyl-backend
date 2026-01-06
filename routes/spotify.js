@@ -2,7 +2,7 @@ const express = require("express");
 const axios = require("axios");
 const router = express.Router();
 
-// GET /spotify/token
+// GETspotify token
 router.get("/token", async (req, res) => {
   try {
     const clientId = process.env.SPOTIFY_CLIENT_ID;
@@ -22,7 +22,6 @@ router.get("/token", async (req, res) => {
         },
       }
     );
-
     res.json({ access_token: tokenResponse.data.access_token });
   } catch (err) {
     console.error("Spotify token error:", err.response?.data || err.message);

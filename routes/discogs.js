@@ -12,10 +12,9 @@ router.get("/search", async (req, res) => {
   if (!title || !artist) {
     return res.status(400).json({ error: "title en artist vereist" });
   }
-
   try {
     const token = process.env.DISCOGS_TOKEN;
-    const query = `${artist} ${title}`; // <— BELANGRIJK
+    const query = `${artist} ${title}`;
 
     const response = await axios.get("https://api.discogs.com/database/search", {
       params: { 
@@ -27,11 +26,8 @@ router.get("/search", async (req, res) => {
         "User-Agent": "VinylApp/1.0" 
       },
     });
-
     const first = response.data.results?.[0];
     if (!first) return res.json({ message: "no match" });
-
-    // ✅ HIER TOEVOEGEN
     console.log("Discogs result:", {
       title: first.title,
       id: first.id,
@@ -54,24 +50,17 @@ router.get("/search", async (req, res) => {
   }
 });
 
-
-/**
- * Tracklist endpoint: haalt release details op (inclusief tracklist)
- * request: GET /discogs/tracklist?releaseId=12345
- */
 router.get("/tracklist", async (req, res) => {
   const { releaseId } = req.query;
   if (!releaseId) return res.status(400).json({ error: "releaseId is required" });
 
   try {
     const token = process.env.DISCOGS_TOKEN;
-    // release endpoint returns tracklist
     const url = `https://api.discogs.com/releases/${releaseId}`;
     const response = await axios.get(url, {
       headers: { Authorization: `Discogs token=${token}` },
     });
 
-    // response.data.tracklist is een array met { position, title, duration }
     res.json({
       tracklist: response.data.tracklist || [],
       title: response.data.title || "",
